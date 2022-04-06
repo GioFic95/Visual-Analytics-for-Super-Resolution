@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: draft.aux
+Reallocating 'name_of_file' (item size: 1) to 6 items.
+The style file: plain.bst
+Reallocating 'name_of_file' (item size: 1) to 5 items.
+Database file #1: refs.bib
+Warning--empty journal in galassounified
+Warning--empty year in galassounified
+You've used 5 entries,
+            2118 wiz_defined-function locations,
+            520 strings with 4946 characters,
+and the built_in function-call counts, 1956 in all, are:
+= -- 168
+> -- 145
+< -- 1
++ -- 60
+- -- 52
+* -- 145
+:= -- 333
+add.period$ -- 12
+call.type$ -- 5
+change.case$ -- 41
+chr.to.int$ -- 0
+cite$ -- 7
+duplicate$ -- 59
+empty$ -- 123
+format.name$ -- 52
+if$ -- 391
+int.to.chr$ -- 0
+int.to.str$ -- 5
+missing$ -- 3
+newline$ -- 25
+num.names$ -- 10
+pop$ -- 56
+preamble$ -- 1
+purify$ -- 36
+quote$ -- 0
+skip$ -- 53
+stack$ -- 0
+substring$ -- 68
+swap$ -- 16
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 20
+warning$ -- 2
+while$ -- 13
+width$ -- 6
+write$ -- 47
+(There were 2 warnings)

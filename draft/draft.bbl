@@ -1,0 +1,33 @@
+\begin{thebibliography}{1}
+
+\bibitem{pacific}
+Diva~J. Amon, Brian R.~C. Kennedy, Kasey Cantwell, Kelley Suhre, Deborah
+  Glickson, Timothy~M. Shank, and Randi~D. Rotjan.
+\newblock Deep-sea debris in the central and western pacific ocean.
+\newblock {\em Frontiers in Marine Science}, 7, 2020.
+
+\bibitem{galassounified}
+Fabio Galasso, Naveen~Shankar Nagaraja, Tatiana~Jim{\'e}nez C{\'a}rdenas,
+  Thomas Brox, and Bernt Schiele.
+\newblock A unified video segmentation benchmark: Annotation, metrics and
+  analysis supplementary material.
+
+\bibitem{galasso2013unified}
+Fabio Galasso, Naveen~Shankar Nagaraja, Tatiana~Jim{\'e}nez C{\'a}rdenas,
+  Thomas Brox, and Bernt Schiele.
+\newblock A unified video segmentation benchmark: Annotation, metrics and
+  analysis.
+\newblock In {\em Proceedings of the IEEE International Conference on Computer
+  Vision}, pages 3527--3534, 2013.
+
+\bibitem{bsrgan}
+Kai Zhang, Jingyun Liang, Luc Van~Gool, and Radu Timofte.
+\newblock Designing a practical degradation model for deep blind image
+  super-resolution, 2021.
+
+\bibitem{lpips}
+Richard Zhang, Phillip Isola, Alexei~A. Efros, Eli Shechtman, and Oliver Wang.
+\newblock The unreasonable effectiveness of deep features as a perceptual
+  metric, 2018.
+
+\end{thebibliography}

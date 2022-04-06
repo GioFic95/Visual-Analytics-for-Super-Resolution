@@ -1,0 +1,55 @@
+\documentclass{article}
+
+\usepackage[english]{babel}
+\usepackage[a4paper, left=.6in, right=.6in, top=0in, bottom=.5in]{geometry}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=false,
+	linkbordercolor={0 1 0},
+	citebordercolor={1 0 0},
+	urlbordercolor={0 0 1},
+	pdfborderstyle={/S/U/W 1}
+}
+\usepackage{titling}
+\predate{}
+\postdate{}
+
+\title{Visual Analytics for Super Resolution}
+\author{Giovanni Ficarra}
+\date{}
+
+\begin{document}
+	\maketitle
+
+	\section{Introduction}
+	
+	During my PhD, I'm dealing with image super resolution. In this field, the most used metrics to evaluate models' performances are SSIM (Structural SIMilarity) and PSNR (Peak Signal to Noise Ratio), but there isn't a common agreement about their reliability. Thus, it is hard to establish which are the best models.
+	
+	In the supplementary material \cite{galassounified} of \cite{galasso2013unified} by Galasso et al. (2013), the authors rely on \textbf{scatter plots} to detect strange patterns in the results of neural networks for video segmentation: in each plot, a point is an image described by a pair of metrics (e.g. boundary precision-recall VS volume precision-recall). In this way, all the pairs of metrics are analyzed to discover when they agree and when they disagree, to find out if they are considering different but useful points of view or just making some errors.
+	In particular, if a set of images are aligned along one direction, but distant along the other, we can inspect those image to analyze the different behavior of the two metrics, and find a reason for their inconsistency.
+
+
+	\section{Dataset and Libraries}
+
+	The 960 original images used for this projects were downloaded from Pexels\footnote{\url{https://www.pexels.com/it-it/}}, Nautilus Live\footnote{\url{https://nautiluslive.org/}} and \cite{pacific}\footnote{\url{https://www.ncei.noaa.gov/access/ocean-exploration/video/}}. Super-resoluted versions of such images were obtained with 19 experiments based on BSRGAN\footnote{\url{https://github.com/cszn/BSRGAN}} \cite{bsrgan} and evaluated with SSIM, PSNR\_Y, PSNR\_RGB and LPIPS \cite{lpips}.
+	More experiments and metrics may be added later, so the index for this project is $AS \geq 960 \times 19 \times 4 = 72'960$.
+	
+	The preprocessing was performed using Python libraries such as PyTorch, Pandas and Numpy, while the visualizations will be realized using Plotly\footnote{\url{https://plotly.com}, \url{https://plotly.com/python/}} and its Dash\footnote{\url{https://plotly.com/dash/}, \url{https://dash.plotly.com/}}.
+
+
+	\section{Visualizations and Analytics}
+
+	Since our interest is in evaluating both metrics \textit{and} SR models, other visualizations with respect to the scatter plots proposed in \cite{galasso2013unified} can be useful too:
+	\begin{itemize}
+		\item \textbf{Parallel coordinates} with the average scores of each models, to show the performances of the networks according to the various metrics and compare them;
+		\item A \textbf{box plot} with the average scores obtained by each image, to analyze differences among the images which are consistent among the models;
+		\item Another \textbf{scatter plot} with two coordinates computed via \textbf{PCA}, to explore the possibility of finding new representative metrics, from the combination of the old ones;
+		\item Pairs of original and super-resoluted \textbf{images}, shown when a point on a scatter plot is selected, to link the behavior of a model on that image with the score it obtained.
+	\end{itemize}
+
+	\textbf{Brushing} in the parallel coordinates allows to restrict the number of considered models, while in the scatter plots or the box plot it filters the set of images.
+
+	{\footnotesize
+	\bibliographystyle{plain}
+	\bibliography{refs}}
+\end{document}
