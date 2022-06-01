@@ -1,10 +1,12 @@
 import itertools
+import pprint
 from pathlib import Path
 from typing import List, Dict
 
+import numpy as np
 import pandas as pd
 import dash
-from dash import dcc, Output, Input
+from dash import dcc, Output, Input, State
 from dash import html
 import dash_bootstrap_components as dbc
 
@@ -39,11 +41,8 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
     dfs2 = get_dfs(csv_all, titles, types)
 
     pp = parallel_plot(dfs1[0], "images")  # todo extend to other dfs
-    scatters = dict()
-    for m1, m2 in itertools.combinations(metrics, 2):
-        metric_combo = f"{m1} VS {m2}"
-        title = f"images ({metric_combo})"
-        scatters[metric_combo] = scatter_plot(dfs2[0], title, m1, m2, highlights)  # todo extend to other dfs
+    metric_combos = [f"{m1} VS {m2}" for m1, m2 in itertools.combinations(metrics, 2)]
+    last_m12 = [None, None]
 
     div_parallel = html.Div(dcc.Graph(config={'displayModeBar': False, 'doubleClick': 'reset'},
                                       figure=pp, id=f"my-graph-pp"),
@@ -55,9 +54,7 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
 
     dropdown = dcc.Dropdown(
                     id="metrics-dropdown",
-                    options=[
-                        {'label': mc, 'value': mc} for mc in scatters.keys()
-                    ],
+                    options=[{'label': mc, 'value': mc} for mc in metric_combos],
                     value="ssim VS psnr_rgb",
                     style={'width': '200px'}
     )
@@ -66,9 +63,13 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
         Output('my-div-sp', 'children'),
         [Input('metrics-dropdown', 'value')]
     )
-    def update_fig(drop_mc):
+    def update_sp(drop_mc):
+        title = f"images ({drop_mc})"
+        m1, m2 = str(drop_mc).split(" VS ")
+        last_m12[0:2] = m1, m2
+        scatter = scatter_plot(dfs2[0], title, m1, m2, highlights)  # todo extend to other dfs
         new_plot = dcc.Graph(config={'displayModeBar': False, 'doubleClick': 'reset'},
-                             figure=scatters[drop_mc], id=f"my-graph-sp"),
+                             figure=scatter, id=f"my-graph-sp")
         return new_plot
 
     @app.callback(
@@ -95,11 +96,51 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
     @app.callback(
         Output('my-graph-sp', 'figure'),
         Input('my-graph-pp', 'restyleData'),
-        Input('my-graph-sp', 'figure')
+        State('my-graph-pp', 'figure'),
+        State('my-graph-sp', 'figure')
     )
-    def callback(selection, g):
+    def callback(selection, pp_fig, sp_fig):
         print("selection:", selection)
-        return g
+        if selection is None:
+            return sp_fig
+        else:
+            # par_coord_data = pp_fig['data'][0]
+            # pprint.pprint(par_coord_data)
+            curr_dims = pp_fig['data'][0].get('dimensions', [])
+            dim = curr_dims[-1]
+            assert dim['label'] == 'Name'
+            traces = dim['ticktext']
+            idxs = dim['tickvals']
+
+            for dim in curr_dims:
+                if dim['label'] == 'Name':
+                    continue
+                else:
+                    try:
+                        constraints = np.array(dim['constraintrange'])
+                        vals = np.array(dim['values'])
+                        if len(constraints.shape) == 1:
+                            new_idxs = np.where((vals > constraints[0]) & (vals < constraints[1]))
+                        elif len(constraints.shape) == 2:
+                            new_idxs = np.array(0)
+                            for c in constraints:
+                                print(c)
+                                new_idxs = np.union1d(np.where((vals > c[0]) & (vals < c[1])), new_idxs)
+                        else:
+                            raise ValueError
+                        idxs = np.intersect1d(idxs, new_idxs)
+                    except KeyError:
+                        continue
+
+            traces = [traces[i] for i in idxs]
+            # print(traces, idxs)
+
+            # return sp_fig
+            m1, m2 = last_m12
+
+            updated_df = dfs2[0].query("category in @traces")  # todo extend to other dfs
+            scatter = scatter_plot(updated_df, f"{m1} VS {m2}", m1, m2, highlights)
+            return scatter
 
     app.layout = html.Div([div_parallel, dropdown, div_scatter])
     app.run_server(debug=True, use_reloader=False)
