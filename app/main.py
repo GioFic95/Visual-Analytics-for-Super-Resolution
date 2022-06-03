@@ -13,7 +13,7 @@ import dash_bootstrap_components as dbc
 from app.plots import parallel_plot, scatter_plot
 
 
-def get_dfs(csv: Path, titles: List[str], types: Dict[str, type]):
+def get_dfs(csv: Path, titles: List[str], types: Dict[str, type]) -> List[pd.DataFrame]:
     df = pd.read_csv(csv, dtype=types)
 
     df_img = df.loc[(df['type'] == 'img') & (df['mask'] == False)]
@@ -24,7 +24,7 @@ def get_dfs(csv: Path, titles: List[str], types: Dict[str, type]):
     df.loc[df_img_mask.index, "type_mask"] = titles[1]
     df.loc[df_vid.index, "type_mask"] = titles[2]
     df.loc[df_vid_mask.index, "type_mask"] = titles[3]
-    return [df_img, df_img, df_img_mask, df_vid, df_vid_mask]
+    return [df_img, df_img_mask, df_vid, df_vid_mask]
 
 
 def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
@@ -39,10 +39,9 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
 
     dfs1 = get_dfs(csv_avg, titles, types)
     dfs2 = get_dfs(csv_all, titles, types)
-    curr_dfp = dfs1[0].copy()  # todo extend to other dfs
-    global curr_dfs, tmp_dfs
-    curr_dfs = dfs2[0].copy()  # todo extend to other dfs
-    tmp_dfs = curr_dfs.copy()
+    curr_dfp = dfs1[0]  # todo extend to other dfs
+    curr_dfs = dfs2[0]  # todo extend to other dfs
+    queries = {"dataset": "", "compression": "", "parallel": ""}
 
     pp = parallel_plot(curr_dfp, "images")
     metric_combos = [f"{m1} VS {m2}" for m1, m2 in itertools.combinations(metrics, 2)]
@@ -66,28 +65,44 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
     metrics_div = html.Div([metrics_label, metrics_dd], className="col")
 
     dataset_label = html.Label("Training dataset:", style={'font-weight': 'bold'})
-    dataset_radio = dcc.RadioItems(["F4K+", "Saipem"], "F4K+", id="dataset-radio", className="form-check",
-                                   inputClassName="form-check-input", labelClassName="form-check-label",
-                                   labelStyle={'display': 'flex'})
+    dataset_radio = dcc.RadioItems({"isb": "F4K+", "saipem": "Saipem", "": "All"}, "", id="dataset-radio",
+                                   className="form-check", labelStyle={'display': 'flex'},
+                                   inputClassName="form-check-input", labelClassName="form-check-label")
     dataset_div = html.Div([dataset_label, dataset_radio], className="col")
 
     compression_label = html.Label("Compression type:", style={'font-weight': 'bold'})
-    compression_radio = dcc.RadioItems(["Image Compression", "Video Compression"], "Image Compression",
+    compression_radio = dcc.RadioItems({"img": "Image Compression", "vid": "Video Compression", "": "All"}, "",
                                        id="compression-radio", className="form-check", labelStyle={'display': 'flex'},
                                        inputClassName="form-check-input", labelClassName="form-check-label")
     compression_div = html.Div([compression_label, compression_radio], className="col")
 
     div_buttons = html.Div([dataset_div, compression_div, metrics_div], className="row", style={"margin": 15})
 
+    def make_query() -> str:
+        query_list = [v for v in queries.values() if v != ""]
+        query = " & ".join(query_list)
+        print(query)
+        return query
+
     @app.callback(
         Output('my-div-sp', 'children'),
-        Input('metrics-dropdown', 'value')
+        Input('metrics-dropdown', 'value'),
+        Input('dataset-radio', 'value'),
+        Input('compression-radio', 'value'),
+        # State('my-div-sp', 'children')
     )
-    def update_sp(drop_mc):
+    def update_sp(drop_mc, radio_ds, radio_cp):
+        print('update_sp', drop_mc, radio_ds, radio_cp)
+
         title = f"images ({drop_mc})"
         m1, m2 = str(drop_mc).split(" VS ")
         last_m12[0:2] = m1, m2
-        scatter = scatter_plot(curr_dfs, title, m1, m2, highlights)
+        queries["dataset"] = f"train == '{radio_ds}'" if radio_ds != "" else ""
+        queries["compression"] = f"type == '{radio_cp}'" if radio_cp != "" else ""
+        query = make_query()
+        updated_df = curr_dfs.query(query) if len(query) > 0 else curr_dfs
+        print(updated_df.shape)
+        scatter = scatter_plot(updated_df, title, m1, m2, highlights)
         new_plot = dcc.Graph(config={'displayModeBar': False, 'doubleClick': 'reset'},
                              figure=scatter, id=f"my-graph-sp")
         return new_plot
@@ -119,8 +134,6 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
         State('my-graph-sp', 'figure')
     )
     def display_select_parallel(selection, pp_fig, sp_fig):
-        global curr_dfs, tmp_dfs
-
         print("selection:", selection)
 
         if selection is None:
@@ -158,8 +171,9 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
             # print(traces, idxs)
 
             m1, m2 = last_m12
-            curr_dfs = tmp_dfs.query("category in @traces")
-            return scatter_plot(curr_dfs, f"{m1} VS {m2}", m1, m2, highlights)
+            queries["parallel"] = f"category in {[t for t in traces]}"
+            updated_df = curr_dfs.query(make_query())
+            return scatter_plot(updated_df, f"{m1} VS {m2}", m1, m2, highlights)
 
     app.layout = html.Div([div_parallel, div_buttons, div_scatter])
     app.run_server(debug=True, use_reloader=False)
