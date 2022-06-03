@@ -33,41 +33,61 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
              "type": str, "mask": bool, "category": str}
     metrics = ["ssim", "psnr_rgb", "psnr_y", "lpips"]
 
-    app = dash.Dash(external_stylesheets=["bWLwgP.css", dbc.themes.FLATLY],
+    app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY],
                     assets_folder="./resources", assets_url_path='/',
                     suppress_callback_exceptions=True)
 
     dfs1 = get_dfs(csv_avg, titles, types)
     dfs2 = get_dfs(csv_all, titles, types)
+    curr_dfp = dfs1[0].copy()  # todo extend to other dfs
+    global curr_dfs, tmp_dfs
+    curr_dfs = dfs2[0].copy()  # todo extend to other dfs
+    tmp_dfs = curr_dfs.copy()
 
-    pp = parallel_plot(dfs1[0], "images")  # todo extend to other dfs
+    pp = parallel_plot(curr_dfp, "images")
     metric_combos = [f"{m1} VS {m2}" for m1, m2 in itertools.combinations(metrics, 2)]
     last_m12 = [None, None]
 
     div_parallel = html.Div(dcc.Graph(config={'displayModeBar': False, 'doubleClick': 'reset'},
-                                      figure=pp, id=f"my-graph-pp"),
+                                      figure=pp, id=f"my-graph-pp", style={'height': 500}),
                             className='row')
     div_scatter = html.Div([
-        html.Div(id=f"my-div-sp", className='eight columns'),
-        html.Div(id=f"my-img", className='four columns')
+        html.Div(id=f"my-div-sp", className='col-8'),
+        html.Div(id=f"my-img", className='col')
     ], className='row')
 
-    dropdown = dcc.Dropdown(
+    metrics_label = html.Label("Metrics:", style={'font-weight': 'bold', "text-align": "center"})
+    metrics_dd = dcc.Dropdown(
                     id="metrics-dropdown",
-                    options=[{'label': mc, 'value': mc} for mc in metric_combos],
+                    options=metric_combos,
                     value="ssim VS psnr_rgb",
                     style={'width': '200px'}
     )
+    metrics_div = html.Div([metrics_label, metrics_dd], className="col")
+
+    dataset_label = html.Label("Training dataset:", style={'font-weight': 'bold'})
+    dataset_radio = dcc.RadioItems(["F4K+", "Saipem"], "F4K+", id="dataset-radio", className="form-check",
+                                   inputClassName="form-check-input", labelClassName="form-check-label",
+                                   labelStyle={'display': 'flex'})
+    dataset_div = html.Div([dataset_label, dataset_radio], className="col")
+
+    compression_label = html.Label("Compression type:", style={'font-weight': 'bold'})
+    compression_radio = dcc.RadioItems(["Image Compression", "Video Compression"], "Image Compression",
+                                       id="compression-radio", className="form-check", labelStyle={'display': 'flex'},
+                                       inputClassName="form-check-input", labelClassName="form-check-label")
+    compression_div = html.Div([compression_label, compression_radio], className="col")
+
+    div_buttons = html.Div([dataset_div, compression_div, metrics_div], className="row", style={"margin": 15})
 
     @app.callback(
         Output('my-div-sp', 'children'),
-        [Input('metrics-dropdown', 'value')]
+        Input('metrics-dropdown', 'value')
     )
     def update_sp(drop_mc):
         title = f"images ({drop_mc})"
         m1, m2 = str(drop_mc).split(" VS ")
         last_m12[0:2] = m1, m2
-        scatter = scatter_plot(dfs2[0], title, m1, m2, highlights)  # todo extend to other dfs
+        scatter = scatter_plot(curr_dfs, title, m1, m2, highlights)
         new_plot = dcc.Graph(config={'displayModeBar': False, 'doubleClick': 'reset'},
                              figure=scatter, id=f"my-graph-sp")
         return new_plot
@@ -86,8 +106,7 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
             new_div = html.Div([
                 html.Img(src=f"imgs/{gt_name}", height=395),
                 html.Img(src=f"imgs/{name}", height=395),
-                html.Br(),
-                html.Span(f"{name} ({trace})"),
+                html.Div(f"{name} ({trace})", style={"margin-top": 10, "margin-bottom": 15}),
             ])
             return new_div
         else:
@@ -99,8 +118,11 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
         State('my-graph-pp', 'figure'),
         State('my-graph-sp', 'figure')
     )
-    def callback(selection, pp_fig, sp_fig):
+    def display_select_parallel(selection, pp_fig, sp_fig):
+        global curr_dfs, tmp_dfs
+
         print("selection:", selection)
+
         if selection is None:
             return sp_fig
         else:
@@ -132,17 +154,14 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
                     except KeyError:
                         continue
 
-            traces = [traces[i] for i in idxs]
+            traces = [traces[i] for i in idxs]  # do NOT remove: it is used in the query!
             # print(traces, idxs)
 
-            # return sp_fig
             m1, m2 = last_m12
+            curr_dfs = tmp_dfs.query("category in @traces")
+            return scatter_plot(curr_dfs, f"{m1} VS {m2}", m1, m2, highlights)
 
-            updated_df = dfs2[0].query("category in @traces")  # todo extend to other dfs
-            scatter = scatter_plot(updated_df, f"{m1} VS {m2}", m1, m2, highlights)
-            return scatter
-
-    app.layout = html.Div([div_parallel, dropdown, div_scatter])
+    app.layout = html.Div([div_parallel, div_buttons, div_scatter])
     app.run_server(debug=True, use_reloader=False)
 
 
