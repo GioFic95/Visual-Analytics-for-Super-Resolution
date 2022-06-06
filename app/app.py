@@ -1,5 +1,4 @@
 import itertools
-import pprint
 from pathlib import Path
 from typing import List, Dict
 
@@ -10,7 +9,7 @@ from dash import dcc, Output, Input, State
 from dash import html
 import dash_bootstrap_components as dbc
 
-from app.plots import parallel_plot, scatter_plot
+from plots import parallel_plot, scatter_plot
 
 
 def get_df(csv: Path, types: Dict[str, type]) -> pd.DataFrame:
@@ -19,14 +18,13 @@ def get_df(csv: Path, types: Dict[str, type]) -> pd.DataFrame:
     return df
 
 
-def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
-    types = {"name": str, "ssim": float, "psnr_rgb": float, "psnr_y": float, "lpips": float,
-             "type": str, "mask": bool, "category": str}
-    metrics = ["ssim", "psnr_rgb", "psnr_y", "lpips"]
-
-    app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY],
-                    assets_folder="./resources", assets_url_path='/',
+def main(csv_avg: Path, csv_all: Path, types: Dict[str, type], metrics: List[str], highlights: List[str] = [], assets_folder="./resources"):
+    title = "Visual Analytics for Underwater Super Resolution"
+    app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY], title=title,
+                    assets_folder=assets_folder, assets_url_path='/',
                     suppress_callback_exceptions=True)
+    global server
+    server = app.server
 
     curr_dfp = get_df(csv_avg, types)
     curr_dfs = get_df(csv_all, types)
@@ -67,8 +65,7 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
 
     div_buttons = html.Div([dataset_div, compression_div, metrics_div], className="row", style={"margin": 15})
 
-    div_title = html.Div(html.H1("Visual Analytics for Underwater Super Resolution"),
-                         style={"margin-top": 30, "margin-left": 30})
+    div_title = html.Div(html.H1(title), style={"margin-top": 30, "margin-left": 30})
 
     def make_query(avg: bool = False) -> str:
         if avg:
@@ -174,7 +171,7 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
             return scatter_plot(updated_df, m1, m2, highlights)
 
     app.layout = html.Div([div_title, div_parallel, div_buttons, div_scatter])
-    app.run_server(debug=True, use_reloader=False)
+    app.run(debug=True, use_reloader=False)
 
 
 if __name__ == '__main__':
@@ -191,4 +188,10 @@ if __name__ == '__main__':
         "00069_BSRGAN_isb_7_freeze_99.png",
         "00438_BSRGAN_isb_7_t5_78.png"
     ]
-    main(Path("./resources/test_results_isb.csv"), Path("./resources/test_results_all_isb.csv"), highlights)
+    types_d = {"name": str, "ssim": float, "psnr_rgb": float, "psnr_y": float, "lpips": float,
+               "type": str, "mask": bool, "category": str}
+    metrics_l = ["ssim", "psnr_rgb", "psnr_y", "lpips"]
+    global server
+    main(Path("./resources/test_results_isb.csv"), Path("./resources/test_results_all_isb.csv"),
+         types_d, metrics_l, highlights, "./resources")
+    print("server:", server)
