@@ -3,9 +3,9 @@ import pandas as pd
 import plotly.graph_objects as go
 
 
-def parallel_plot(df: pd.DataFrame, title: str):
+def parallel_plot(df: pd.DataFrame):
     if len(df) == 0:
-        raise ValueError("\n***", title, "***   --> empty dataframe")
+        raise ValueError("\n***   empty dataframe   ***")
 
     dfc = df.copy()
     dfc["sum"] = dfc.sum(numeric_only=True)
@@ -28,12 +28,11 @@ def parallel_plot(df: pd.DataFrame, title: str):
                      label='Name', values=names_ids)
             ]),
             line=dict(color=names_ids, autocolorscale=True)
-        ),
-        layout=dict(title=title)
+        )
     )
 
 
-def scatter_plot(df: pd.DataFrame, title: str, x: str, y: str, highlights: List[str] = []):
+def scatter_plot(df: pd.DataFrame, x: str, y: str, highlights: List[str] = []):
     scatter = go.Figure()
 
     for category, dfg in df.groupby("category"):
@@ -56,7 +55,6 @@ def scatter_plot(df: pd.DataFrame, title: str, x: str, y: str, highlights: List[
                         )))
 
     scatter.update_layout(
-        title=title,
         xaxis_title=x,
         yaxis_title=y,
         clickmode='event+select',

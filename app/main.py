@@ -13,22 +13,13 @@ import dash_bootstrap_components as dbc
 from app.plots import parallel_plot, scatter_plot
 
 
-def get_dfs(csv: Path, titles: List[str], types: Dict[str, type]) -> List[pd.DataFrame]:
+def get_df(csv: Path, types: Dict[str, type]) -> pd.DataFrame:
     df = pd.read_csv(csv, dtype=types)
-
-    df_img = df.loc[(df['type'] == 'img') & (df['mask'] == False)]
-    df_img_mask = df.loc[(df['type'] == 'img') & (df['mask'] == True)]
-    df_vid = df.loc[(df['type'] == 'vid') & (df['mask'] == False)]
-    df_vid_mask = df.loc[(df['type'] == 'vid') & (df['mask'] == True)]
-    df.loc[df_img.index, "type_mask"] = titles[0]
-    df.loc[df_img_mask.index, "type_mask"] = titles[1]
-    df.loc[df_vid.index, "type_mask"] = titles[2]
-    df.loc[df_vid_mask.index, "type_mask"] = titles[3]
-    return [df_img, df_img_mask, df_vid, df_vid_mask]
+    df.query("mask == False", inplace=True)
+    return df
 
 
 def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
-    titles = ["Tests on images", "Tests on images with masks", "Tests on videos", "Tests on videos with masks"]
     types = {"name": str, "ssim": float, "psnr_rgb": float, "psnr_y": float, "lpips": float,
              "type": str, "mask": bool, "category": str}
     metrics = ["ssim", "psnr_rgb", "psnr_y", "lpips"]
@@ -37,13 +28,11 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
                     assets_folder="./resources", assets_url_path='/',
                     suppress_callback_exceptions=True)
 
-    dfs1 = get_dfs(csv_avg, titles, types)
-    dfs2 = get_dfs(csv_all, titles, types)
-    curr_dfp = dfs1[0]  # todo extend to other dfs
-    curr_dfs = dfs2[0]  # todo extend to other dfs
+    curr_dfp = get_df(csv_avg, types)
+    curr_dfs = get_df(csv_all, types)
     queries = {"dataset": "", "compression": "", "parallel": ""}
 
-    pp = parallel_plot(curr_dfp, "images")
+    pp = parallel_plot(curr_dfp)
     metric_combos = [f"{m1} VS {m2}" for m1, m2 in itertools.combinations(metrics, 2)]
     last_m12 = [None, None]
 
@@ -52,7 +41,7 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
                             className='row')
     div_scatter = html.Div([
         html.Div(id=f"my-div-sp", className='col-8'),
-        html.Div(id=f"my-img", className='col')
+        html.Div(id=f"my-img", className='col-4')
     ], className='row')
 
     metrics_label = html.Label("Metrics:", style={'font-weight': 'bold', "text-align": "center"})
@@ -78,34 +67,43 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
 
     div_buttons = html.Div([dataset_div, compression_div, metrics_div], className="row", style={"margin": 15})
 
-    def make_query() -> str:
-        query_list = [v for v in queries.values() if v != ""]
+    div_title = html.Div(html.H1("Visual Analytics for Underwater Super Resolution"),
+                         style={"margin-top": 30, "margin-left": 30})
+
+    def make_query(avg: bool = False) -> str:
+        if avg:
+            query_list = [v for k, v in queries.items() if v != "" and k != "parallel"]
+        else:
+            query_list = [v for v in queries.values() if v != ""]
         query = " & ".join(query_list)
         print(query)
         return query
 
     @app.callback(
         Output('my-div-sp', 'children'),
+        Output('my-graph-pp', 'figure'),
         Input('metrics-dropdown', 'value'),
         Input('dataset-radio', 'value'),
-        Input('compression-radio', 'value'),
-        # State('my-div-sp', 'children')
+        Input('compression-radio', 'value')
     )
     def update_sp(drop_mc, radio_ds, radio_cp):
         print('update_sp', drop_mc, radio_ds, radio_cp)
 
-        title = f"images ({drop_mc})"
         m1, m2 = str(drop_mc).split(" VS ")
         last_m12[0:2] = m1, m2
         queries["dataset"] = f"train == '{radio_ds}'" if radio_ds != "" else ""
         queries["compression"] = f"type == '{radio_cp}'" if radio_cp != "" else ""
         query = make_query()
-        updated_df = curr_dfs.query(query) if len(query) > 0 else curr_dfs
-        print(updated_df.shape)
-        scatter = scatter_plot(updated_df, title, m1, m2, highlights)
-        new_plot = dcc.Graph(config={'displayModeBar': False, 'doubleClick': 'reset'},
-                             figure=scatter, id=f"my-graph-sp")
-        return new_plot
+        updated_dfs = curr_dfs.query(query) if len(query) > 0 else curr_dfs
+        updated_dfp = curr_dfp.query(query) if len(query) > 0 else curr_dfp
+        print(updated_dfs.shape, updated_dfp.shape)
+
+        scatter = scatter_plot(updated_dfs, m1, m2, highlights)
+        scatter.update_layout(margin=dict(l=20, r=20, t=20, b=20))
+        new_div = dcc.Graph(config={'displayModeBar': False, 'doubleClick': 'reset'},
+                            figure=scatter, id=f"my-graph-sp")
+        new_par = parallel_plot(updated_dfp)
+        return new_div, new_par
 
     @app.callback(
         Output('my-img', 'children'),
@@ -173,9 +171,9 @@ def main(csv_avg: Path, csv_all: Path, highlights: List[str] = []):
             m1, m2 = last_m12
             queries["parallel"] = f"category in {[t for t in traces]}"
             updated_df = curr_dfs.query(make_query())
-            return scatter_plot(updated_df, f"{m1} VS {m2}", m1, m2, highlights)
+            return scatter_plot(updated_df, m1, m2, highlights)
 
-    app.layout = html.Div([div_parallel, div_buttons, div_scatter])
+    app.layout = html.Div([div_title, div_parallel, div_buttons, div_scatter])
     app.run_server(debug=True, use_reloader=False)
 
 
