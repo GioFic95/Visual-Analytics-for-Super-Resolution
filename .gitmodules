@@ -1,0 +1,3 @@
+[submodule "app"]
+	path = app
+	url = https://github.com/GioFic95/Visual-Analytics-for-Super-Resolution---app
