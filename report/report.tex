@@ -1,0 +1,84 @@
+\documentclass[12pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[a4paper, left=.8in, right=.8in, top=.5in, bottom=.5in]{geometry}
+\usepackage{hyperref}
+\usepackage[style=numeric,sorting=none,backend=bibtex]{biblatex}
+\addbibresource{refs.bib}
+\hypersetup{
+	colorlinks=false,
+	linkbordercolor={0 1 0},
+	citebordercolor={1 0 0},
+	urlbordercolor={0 0 1},
+	pdfborderstyle={/S/U/W 1}
+}
+\usepackage{titling}
+\usepackage{amsmath}
+\predate{}
+\postdate{}
+
+\title{Visual Analytics for Underwater Super Resolution}
+\author{Giovanni Ficarra}
+\date{}
+
+\begin{document}
+	\maketitle
+
+	\section{Introduction}
+
+	During my PhD, I am dealing with underwater image super resolution. In this field, the most used metrics to evaluate the performances of the proposed neural networks are SSIM (Structural SIMilarity) and PSNR (Peak Signal to Noise Ratio), but there is not a common agreement about their reliability. In fact, often a visual inspection shows that images with higher scores do not appear better than images with lower scores. Thus, it is hard to establish which are the best models.
+
+	It is fundamental to find out which metrics are the most meaningful to proceed in the research of better SR models. To do this, it may be interesting to plot \textit{all} the results of our experiments and visually analyze the differences and similarities among them with respect to the scores they obtains according to the considered metrics.
+	Moreover, it may be useful to check what images with analogous results across different experiments have and do not have in common, for example to build a more significant benchmark dataset.
+
+
+	\section{Related Works}
+
+	In the supplementary material \cite{galassounified} of \cite{galasso2013unified} by Galasso et al. (2013), the authors rely on \textit{scatter plots} to detect strange patterns in the results of neural networks for video segmentation: in each plot, a point is an image described by a pair of metrics (e.g. boundary precision-recall VS volume precision-recall). In this way, all the pairs of metrics are analyzed to discover when they agree and when they disagree, to find out if they are considering different but useful points of view or just making some errors.
+	In particular, if a subset of images is aligned along one direction, but distant along the other, we can inspect those images to analyze the different behaviors of the two metrics and find a reason for their inconsistency, or discard one of the metrics.
+
+	Our intent is to extend this approach with an interactive application which allows to select images from the scatter plots to easily compare them and exploit also other visualizations, such as a parallel coordinates plot and a box plot, to combine different insights.
+
+
+	\section{Dataset and Libraries}
+
+	For this project, I used a dataset composed of frames extracted from videos downloaded from Pexels\footnote{\url{https://www.pexels.com/it-it/}}, Nautilus Live\footnote{\url{https://nautiluslive.org/}}, and the website of the Ocean Exploration Video Portal of the National Centers for Environmental Information of the USA \cite{pacific}\footnote{\url{https://www.ncei.noaa.gov/access/ocean-exploration/video/}}.
+
+	The resulting dataset was splitted in three parts, for training, validation and testing. Here we will use the test set, composed of 960 images, together with their super-resolved counterparts, obtained through about fifty experiments, where we tried different compression methods and training datasets, and many model parameters.
+
+	The dataset used for this project also includes, for each super-resolved image, its evaluation with SSIM, PSNR\_Y, PSNR\_RGB and LPIPS \cite{lpips}, already computed and stored in CSV files. Thus, the total amount of data is
+	\begin{equation*}
+		960 \text{ images} \times 51 \text{ experiments} \times 4 \text{ metrics} = 195'840 \text{ values}.
+	\end{equation*}
+	To better visualize such amount of data, our application allows to see only information relative to a subset of the dataset, based on which compression method and training dataset were used.
+
+	This preprocessing was performed using Python libraries such as PyTorch, Pandas and Numpy, while the visualizations will be realized using Plotly\footnote{\url{https://plotly.com}, \url{https://plotly.com/python/}} and its Dash\footnote{\url{https://plotly.com/dash/}, \url{https://dash.plotly.com/}}.
+
+
+	\section{Visualizations and Analytics}
+
+	Since our interest is in evaluating both metrics \textit{and} SR models, other visualizations with respect to the scatter plots proposed in \cite{galasso2013unified} can be useful too:
+	\begin{itemize}
+		\item \textbf{Parallel coordinates} plot with the average scores of each model, to show the performances of the networks according to the various metrics and compare them;
+		\item Another \textbf{scatter plot} with two coordinates computed via \textbf{PCA}, to explore the possibility of finding new representative metrics, from the combination of the old ones;
+		\item Pairs of original and super-resoluted \textbf{images}, shown when a point on a scatter plot is selected, to link the behavior of a model on that image with the score it obtained.
+		\item A \textbf{box plot} with statistics of a selected subset of images, to analyze differences among the images across all the models.
+	\end{itemize}
+
+	\subsection{The Parallel Coordinates Plot}
+
+	.
+
+	\textbf{Brushing} in the parallel coordinates plot allows to restrict the number of considered models.
+
+	\subsection{The Scatter Plots}
+
+	.
+
+	\subsection{The Box Plot}
+
+	To enforce the idea that with the box plot we want to analyze the behavior of some images across all models, this diagram is kept separated from the others, so that filtering via buttons or brushing does not affect it.
+
+	\newpage
+	\printbibliography
+\end{document}

@@ -1,0 +1,300 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{none/global//global/global}
+  \entry{galassounified}{article}{}
+    \name{author}{5}{}{%
+      {{hash=GF}{%
+         family={Galasso},
+         familyi={G\bibinitperiod},
+         given={Fabio},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=NNS}{%
+         family={Nagaraja},
+         familyi={N\bibinitperiod},
+         given={Naveen\bibnamedelima Shankar},
+         giveni={N\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=CTJ}{%
+         family={C{\'a}rdenas},
+         familyi={C\bibinitperiod},
+         given={Tatiana\bibnamedelima Jim{\'e}nez},
+         giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=BT}{%
+         family={Brox},
+         familyi={B\bibinitperiod},
+         given={Thomas},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=SB}{%
+         family={Schiele},
+         familyi={S\bibinitperiod},
+         given={Bernt},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GF+1}
+    \strng{fullhash}{GFNNSCTJBTSB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{A Unified Video Segmentation Benchmark: Annotation, Metrics
+  and Analysis Supplementary Material}
+  \endentry
+
+  \entry{galasso2013unified}{inproceedings}{}
+    \name{author}{5}{}{%
+      {{hash=GF}{%
+         family={Galasso},
+         familyi={G\bibinitperiod},
+         given={Fabio},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=NNS}{%
+         family={Nagaraja},
+         familyi={N\bibinitperiod},
+         given={Naveen\bibnamedelima Shankar},
+         giveni={N\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=CTJ}{%
+         family={C{\'a}rdenas},
+         familyi={C\bibinitperiod},
+         given={Tatiana\bibnamedelima Jim{\'e}nez},
+         giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=BT}{%
+         family={Brox},
+         familyi={B\bibinitperiod},
+         given={Thomas},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=SB}{%
+         family={Schiele},
+         familyi={S\bibinitperiod},
+         given={Bernt},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GF+1}
+    \strng{fullhash}{GFNNSCTJBTSB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{Proceedings of the IEEE International Conference on
+  Computer Vision}
+    \field{pages}{3527\bibrangedash 3534}
+    \field{title}{A unified video segmentation benchmark: Annotation, metrics
+  and analysis}
+    \field{year}{2013}
+  \endentry
+
+  \entry{pacific}{article}{}
+    \name{author}{7}{}{%
+      {{hash=ADJ}{%
+         family={Amon},
+         familyi={A\bibinitperiod},
+         given={Diva\bibnamedelima J.},
+         giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=KBRC}{%
+         family={Kennedy},
+         familyi={K\bibinitperiod},
+         given={Brian R.\bibnamedelima C.},
+         giveni={B\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim
+  C\bibinitperiod},
+      }}%
+      {{hash=CK}{%
+         family={Cantwell},
+         familyi={C\bibinitperiod},
+         given={Kasey},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=SK}{%
+         family={Suhre},
+         familyi={S\bibinitperiod},
+         given={Kelley},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=GD}{%
+         family={Glickson},
+         familyi={G\bibinitperiod},
+         given={Deborah},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=STM}{%
+         family={Shank},
+         familyi={S\bibinitperiod},
+         given={Timothy\bibnamedelima M.},
+         giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=RRD}{%
+         family={Rotjan},
+         familyi={R\bibinitperiod},
+         given={Randi\bibnamedelima D.},
+         giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{ADJ+1}
+    \strng{fullhash}{ADJKBRCCKSKGDSTMRRD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Marine debris is a growing problem in the world’s deep ocean. The
+  naturally slow biological and chemical processes operating at depth, coupled
+  with the types of materials that are used commercially, suggest that debris
+  is likely to persist in the deep ocean for long periods of time, ranging from
+  hundreds to thousands of years. However, the realized scale of marine debris
+  accumulation in the deep ocean is unknown due to the logistical,
+  technological, and financial constraints related to deep-ocean exploration.
+  Coordinated deep-water exploration from 2015 to 2017 enabled new insights
+  into the status of deep-sea marine debris throughout the central and western
+  Pacific Basin via ROV expeditions conducted onboard NOAA Ship Okeanos
+  Explorer and RV Falkor. These expeditions included sites in United States
+  protected areas and monuments, other Exclusive Economic Zones, international
+  protected areas, and areas beyond national jurisdiction. Metal, glass,
+  plastic, rubber, cloth, fishing gear, and other marine debris were
+  encountered during 17.5% of the 188 dives from 150 to 6,000 m depth.
+  Correlations were observed between deep-sea debris densities and depth,
+  geological features, and distance from human-settled land. The highest
+  densities occurred off American Samoa and the main Hawaiian Islands. Debris,
+  mostly consisting of fishing gear and plastic, were also observed in most of
+  the large-scale marine protected areas, adding to the growing body of
+  evidence that even deep, remote areas of the ocean are not immune from human
+  impacts. Interactions with and impacts on biological communities were noted,
+  though further study is required to understand the full extent of these
+  impacts. We also discuss potential sources and long-term implications of this
+  debris.%
+    }
+    \verb{doi}
+    \verb 10.3389/fmars.2020.00369
+    \endverb
+    \field{issn}{2296-7745}
+    \field{title}{Deep-Sea Debris in the Central and Western Pacific Ocean}
+    \verb{url}
+    \verb https://www.frontiersin.org/article/10.3389/fmars.2020.00369
+    \endverb
+    \field{volume}{7}
+    \field{journaltitle}{Frontiers in Marine Science}
+    \field{year}{2020}
+  \endentry
+
+  \entry{bsrgan}{misc}{}
+    \name{author}{4}{}{%
+      {{hash=ZK}{%
+         family={Zhang},
+         familyi={Z\bibinitperiod},
+         given={Kai},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=LJ}{%
+         family={Liang},
+         familyi={L\bibinitperiod},
+         given={Jingyun},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=VGL}{%
+         family={Van\bibnamedelima Gool},
+         familyi={V\bibinitperiod\bibinitdelim G\bibinitperiod},
+         given={Luc},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=TR}{%
+         family={Timofte},
+         familyi={T\bibinitperiod},
+         given={Radu},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {arXiv}%
+    }
+    \keyw{Image and Video Processing (eess.IV), Computer Vision and Pattern
+  Recognition (cs.CV), FOS: Electrical engineering, electronic engineering,
+  information engineering, FOS: Electrical engineering, electronic engineering,
+  information engineering, FOS: Computer and information sciences, FOS:
+  Computer and information sciences}
+    \strng{namehash}{ZK+1}
+    \strng{fullhash}{ZKLJVGLTR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.48550/ARXIV.2103.14006
+    \endverb
+    \field{title}{Designing a Practical Degradation Model for Deep Blind Image
+  Super-Resolution}
+    \verb{url}
+    \verb https://arxiv.org/abs/2103.14006
+    \endverb
+    \field{year}{2021}
+  \endentry
+
+  \entry{lpips}{misc}{}
+    \name{author}{5}{}{%
+      {{hash=ZR}{%
+         family={Zhang},
+         familyi={Z\bibinitperiod},
+         given={Richard},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=IP}{%
+         family={Isola},
+         familyi={I\bibinitperiod},
+         given={Phillip},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=EAA}{%
+         family={Efros},
+         familyi={E\bibinitperiod},
+         given={Alexei\bibnamedelima A.},
+         giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=SE}{%
+         family={Shechtman},
+         familyi={S\bibinitperiod},
+         given={Eli},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=WO}{%
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={Oliver},
+         giveni={O\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {arXiv}%
+    }
+    \keyw{Computer Vision and Pattern Recognition (cs.CV), Graphics (cs.GR),
+  FOS: Computer and information sciences, FOS: Computer and information
+  sciences}
+    \strng{namehash}{ZR+1}
+    \strng{fullhash}{ZRIPEAASEWO1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.48550/ARXIV.1801.03924
+    \endverb
+    \field{title}{The Unreasonable Effectiveness of Deep Features as a
+  Perceptual Metric}
+    \verb{url}
+    \verb https://arxiv.org/abs/1801.03924
+    \endverb
+    \field{year}{2018}
+  \endentry
+\enddatalist
+\endinput
