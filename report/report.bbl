@@ -17,6 +17,47 @@
 \endgroup
 
 \datalist[entry]{none/global//global/global}
+  \entry{sr-survey}{misc}{}
+    \name{author}{3}{}{%
+      {{hash=WZ}{%
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={Zhihao},
+         giveni={Z\bibinitperiod},
+      }}%
+      {{hash=CJ}{%
+         family={Chen},
+         familyi={C\bibinitperiod},
+         given={Jian},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=HSCH}{%
+         family={Hoi},
+         familyi={H\bibinitperiod},
+         given={Steven C.\bibnamedelima H.},
+         giveni={S\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim
+  H\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {arXiv}%
+    }
+    \keyw{Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and
+  information sciences, FOS: Computer and information sciences}
+    \strng{namehash}{WZCJHSCH1}
+    \strng{fullhash}{WZCJHSCH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.48550/ARXIV.1902.06068
+    \endverb
+    \field{title}{Deep Learning for Image Super-resolution: A Survey}
+    \verb{url}
+    \verb https://arxiv.org/abs/1902.06068
+    \endverb
+    \field{year}{2019}
+  \endentry
+
   \entry{galassounified}{article}{}
     \name{author}{5}{}{%
       {{hash=GF}{%
@@ -101,6 +142,70 @@
     \field{title}{A unified video segmentation benchmark: Annotation, metrics
   and analysis}
     \field{year}{2013}
+  \endentry
+
+  \entry{f4k}{book}{}
+    \name{author}{5}{}{%
+      {{hash=FRB}{%
+         family={Fisher},
+         familyi={F\bibinitperiod},
+         given={Robert\bibnamedelima B.},
+         giveni={R\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=CBYH}{%
+         family={Chen-Burger},
+         familyi={C\bibinithyphendelim B\bibinitperiod},
+         given={Yun-Heh},
+         giveni={Y\bibinithyphendelim H\bibinitperiod},
+      }}%
+      {{hash=GD}{%
+         family={Giordano},
+         familyi={G\bibinitperiod},
+         given={Daniela},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=HL}{%
+         family={Hardman},
+         familyi={H\bibinitperiod},
+         given={Lynda},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=LFP}{%
+         family={Lin},
+         familyi={L\bibinitperiod},
+         given={Fang-Pang},
+         giveni={F\bibinithyphendelim P\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer Publishing Company, Incorporated}%
+    }
+    \strng{namehash}{FRB+1}
+    \strng{fullhash}{FRBCBYHGDHLLFP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    This book gives a start-to-finish overview of the whole Fish4Knowledge
+  project, in 18 short chapters, each describing one aspect of the project. The
+  Fish4Knowledge project explored the possibilities of big video data, in this
+  case from undersea video. Recording and analyzing 90 thousand hours of video
+  from ten camera locations, the project gives a 3 year view of fish abundance
+  in several tropical coral reefs off the coast of Taiwan. The research system
+  built a remote recording network, over 100 Tb of storage, supercomputer
+  processing, video target detection and tracking, fish species recognition and
+  analysis, a large SQL database to record the results and an efficient
+  retrieval mechanism. Novel user interface mechanisms were developed to
+  provide easy access for marine ecologists, who wanted to explore the dataset.
+  The book is a useful resource for system builders, as it gives an overview of
+  the many new methods that were created to build the Fish4Knowledge system in
+  a manner that also allows readers to see how all the components fit
+  together.%
+    }
+    \field{edition}{1st}
+    \field{isbn}{331930206X}
+    \field{title}{Fish4Knowledge: Collecting and Analyzing Massive Coral Reef
+  Fish Video Data}
+    \field{year}{2016}
   \endentry
 
   \entry{pacific}{article}{}
@@ -191,56 +296,6 @@
     \field{volume}{7}
     \field{journaltitle}{Frontiers in Marine Science}
     \field{year}{2020}
-  \endentry
-
-  \entry{bsrgan}{misc}{}
-    \name{author}{4}{}{%
-      {{hash=ZK}{%
-         family={Zhang},
-         familyi={Z\bibinitperiod},
-         given={Kai},
-         giveni={K\bibinitperiod},
-      }}%
-      {{hash=LJ}{%
-         family={Liang},
-         familyi={L\bibinitperiod},
-         given={Jingyun},
-         giveni={J\bibinitperiod},
-      }}%
-      {{hash=VGL}{%
-         family={Van\bibnamedelima Gool},
-         familyi={V\bibinitperiod\bibinitdelim G\bibinitperiod},
-         given={Luc},
-         giveni={L\bibinitperiod},
-      }}%
-      {{hash=TR}{%
-         family={Timofte},
-         familyi={T\bibinitperiod},
-         given={Radu},
-         giveni={R\bibinitperiod},
-      }}%
-    }
-    \list{publisher}{1}{%
-      {arXiv}%
-    }
-    \keyw{Image and Video Processing (eess.IV), Computer Vision and Pattern
-  Recognition (cs.CV), FOS: Electrical engineering, electronic engineering,
-  information engineering, FOS: Electrical engineering, electronic engineering,
-  information engineering, FOS: Computer and information sciences, FOS:
-  Computer and information sciences}
-    \strng{namehash}{ZK+1}
-    \strng{fullhash}{ZKLJVGLTR1}
-    \field{labelnamesource}{author}
-    \field{labeltitlesource}{title}
-    \verb{doi}
-    \verb 10.48550/ARXIV.2103.14006
-    \endverb
-    \field{title}{Designing a Practical Degradation Model for Deep Blind Image
-  Super-Resolution}
-    \verb{url}
-    \verb https://arxiv.org/abs/2103.14006
-    \endverb
-    \field{year}{2021}
   \endentry
 
   \entry{lpips}{misc}{}
